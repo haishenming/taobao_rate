@@ -1,5 +1,6 @@
 import requests
 import re
+import json
 
 url = "https://rate.taobao.com/feedRateList.htm"
 
@@ -40,8 +41,12 @@ params = {
     'currentPageNum': 1,
     # 每页返回多少条评论
     'pageSize': '20',
+    'callback': 'json'
 }
 
 if __name__ == '__main__':
     res = requests.get(url, headers=headers, cookies=cookies, params=params)
-    print(exec(res.text[3:-2]))
+    s = re.search("json\((.*)\)", res.text)
+    rdata = json.loads(s.group(1))
+
+    print(res.text)
